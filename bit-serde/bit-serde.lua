@@ -69,10 +69,42 @@ Writer.new = function()
             )
             self.pos = self.pos + 2
         elseif bit_val < 0x20000 then
-            error("not implemented")
+            ensureSize(self, 3)
+            self.view.setUInt8(
+                self.pos, 
+                bit.bor(bit.rshift(bit_val, 14), 0x80))
+            self.view.setUInt16(
+                self.pos + 1, 
+                bit.bor(
+                    bit.band(bit_val, 0x7f), 
+                    bit.lshift(bit.band(bit_val, 0x3f80), 1), 
+                    0x8000
+                )
+            )
+            self.pos = self.pos + 3
         elseif bit_val < 0x10000000 then
-            error("not implemented")
+            ensureSize(self, 4)
+            self.view.setUInt32(
+                self.pos,
+                bit.bor(
+                    bit.band(bit_val, 0x7f), 
+                    bit.lshift(bit.band(bit_val, 0x3f80), 1), 
+                    bit.lshift(bit.band(bit_val, 0x1fc000), 2),
+                    bit.lshift(bit.band(bit_val, 0xfe00000), 3),
+                    0x80808000
+                )
+            )
+            self.pos = self.pos + 4
         elseif bit_val < 0x800000000 then
+            --[[
+      this.ensureSize(5);
+      this.view.setUint8(this.pos, Math.floor(val / Math.pow(2, 28)) | 0x80);
+      this.view.setUint32(
+        this.pos + 1,
+        (val & 0x7f) | ((val & 0x3f80) << 1) | ((val & 0x1fc000) << 2) | ((val & 0xfe00000) << 3) | 0x80808000
+      );
+      this.pos += 5;
+            --]]
             error("not implemented")
         elseif bit_val < 0x40000000000 then
             error("not implemented")
@@ -168,7 +200,7 @@ Reader.new = function(_, view)
             local byte = self.view.getUInt8(self.pos)
             self.pos = self.pos + 1
 
-            if bit.tobit(byte) < 0x80 then
+            if byte < 0x80 then
                 return val + byte
             end
 

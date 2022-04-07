@@ -70,13 +70,12 @@ function DataView.new(_, buffer)
     end
 
     function setFloat32(pos, val)
-        local bytes = struct.pack("<f", val)
+        local bytes = struct.pack(">f", val)
         setBytes(self.buffer, pos, bytes)
     end
 
     function setString(pos, val)
-        local bytes = struct.pack("<s", val)
-        bytes = bytes:sub(1, -2) -- remove zero-terminator
+        local bytes = struct.pack(">c" .. #val, val)
         setBytes(self.buffer, pos, bytes)
     end
 
@@ -97,11 +96,11 @@ function DataView.new(_, buffer)
     end
 
     function getFloat32(pos)
-        return struct.unpack("<f", self.buffer.bytes(), pos)
+        return struct.unpack(">f", self.buffer.bytes(), pos)
     end
 
     function getString(pos, len)
-        return struct.unpack("<c" .. len, self.buffer.bytes(), pos)
+        return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
     end
 
     function toHex()
