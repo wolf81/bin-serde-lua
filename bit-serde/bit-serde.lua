@@ -141,29 +141,11 @@ Writer.new = function()
         end
     end
 
---[[
-    const bigval = BigInt(val);
-    this.writeUVarint(
-        Number(
-            (bigval >> 63n) ^ (bigval << 1n))
-        );
-    return this;
---]]
-
     function writeVarint(val)
-        print("v", val)
-
-        local r1 = bit.rshift(val, 63)
-        local r2 = bit.lshift(val, 1)
-
-        print("r1", r1)
-        print("r2", r2)
-
-        local sign = val > 0 and 1 or -1
-
-        local n = bit.bxor(r1, r2) * sign
-        print("n", n)
-        writeUVarint(tonumber(n))
+        local r1 = bit.arshift(val, 0x3f)
+        local r2 = bit.lshift(val, 0x1)
+        local n = bit.bxor(r1, r2)
+        writeUVarint(n)
     end
 
     function writeFloat(val)
@@ -281,15 +263,10 @@ Reader.new = function(_, view)
         end
     end
 
-    --[[
-    const val = BigInt(this.readUVarint());
-    return Number((val >> 1n) ^ -(val & 1n));
-    --]]
-
     function readVarint()
-        local val = readUVarint()
-        local r1 = bit.rshift(val, 1)
-        local r2 = -(bit.band(val, 1))
+        local val = readUVarint() * 1LL
+        local r1 = bit.rshift(val, 0x1)
+        local r2 = -(bit.band(val, 0x1))
         return bit.bxor(r1, r2)
     end
 
