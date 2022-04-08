@@ -40,6 +40,16 @@ ArrayBuffer.new = function(_, length)
         return string.byte(self.bytes[pos])
     end
 
+    function slice(pos, len)
+        local bytes = {}
+
+        for i = pos, pos + len - 1 do
+            bytes[#bytes + 1] = string.byte(self.bytes[i + 1])
+        end
+
+        return bytes
+   end
+
     function toHex()
         return hex_dump(table.concat(self.bytes))
     end
@@ -49,6 +59,7 @@ ArrayBuffer.new = function(_, length)
         byteLength = byteLength,
         setByte = setByte,
         getByte = getByte,
+        slice = slice,
         toHex = toHex,
     }
 end

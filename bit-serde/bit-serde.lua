@@ -169,7 +169,8 @@ Writer.new = function()
     function writeBuffer(buf)
         ensureSize(self, #buf)
 
-        for i, byte in ipairs(buf) do
+        for i = 1, #buf do
+            local byte = string.sub(buf, i, i)
             self.view.setByte(self.pos + i, byte)
         end
 

@@ -101,15 +101,8 @@ function DataView.new(_, buffer)
     end
 
     function slice(pos, len)
-        local bytes = {}
-
-        for i = pos, pos + len - 1 do
-            local byte = self.buffer.getByte(i + 1)
-            bytes[#bytes + 1] = byte
-        end
-
-        return bytes
-   end
+        return self.buffer.slice(pos, len)
+    end
 
     function toHex()
         return self.buffer.toHex()
