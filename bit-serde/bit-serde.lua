@@ -167,7 +167,13 @@ Writer.new = function()
     end
 
     function writeBuffer(buf)
-        error("not implemented")
+        ensureSize(self, #buf)
+
+        for i, byte in ipairs(buf) do
+            self.view.setByte(self.pos + i, byte)
+        end
+
+        self.pos = self.pos + #buf
     end
 
     function writeBits(bits)
@@ -286,8 +292,10 @@ Reader.new = function(_, view)
         return v
     end
 
-    function readBuffer()
-        error("not implemented")
+    function readBuffer(num_bytes)
+        local bytes = self.view.slice(self.pos, num_bytes)
+        self.pos = self.pos + num_bytes
+        return bytes
     end
 
     function readBits(num_bits)

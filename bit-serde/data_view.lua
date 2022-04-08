@@ -68,6 +68,10 @@ function DataView.new(_, buffer)
         setBytes(self.buffer, pos, bytes)
     end
 
+    function setByte(pos, val)
+        self.buffer.setByte(pos, val)
+    end
+
     function getUInt8(pos)
         return struct.unpack(">B", self.buffer.bytes(), pos)
     end
@@ -92,11 +96,15 @@ function DataView.new(_, buffer)
         return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
     end
 
+    function getByte(pos)
+        return self.buffer.getByte(pos)
+    end
+
     function slice(pos, len)
         local bytes = {}
 
         for i = pos, pos + len - 1 do
-            local byte = self.buffer.getByte(i)
+            local byte = self.buffer.getByte(i + 1)
             bytes[#bytes + 1] = byte
         end
 
@@ -117,6 +125,7 @@ function DataView.new(_, buffer)
         setUInt64 = setUInt64,
         setFloat32 = setFloat32,
         setString = setString,
+        setByte = setByte,
 
         getUInt8 = getUInt8,
         getUInt16 = getUInt16,
@@ -124,6 +133,7 @@ function DataView.new(_, buffer)
         getUInt64 = getUInt64,
         getFloat32 = getFloat32,
         getString = getString,
+        getByte = getByte,
 
         slice = slice,
         toHex = toHex,
