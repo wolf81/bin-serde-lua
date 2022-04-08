@@ -25,7 +25,7 @@ local DataView = {}
 local function setBytes(buffer, offset, bytes)
     for i = 1, #bytes do
         local v = string.sub(bytes, i, i)
-        buffer.setByte(offset + i, v)
+        buffer.setByte(offset + i - 1, v)
     end
 end
 
@@ -69,34 +69,34 @@ function DataView.new(_, buffer)
     end
 
     function getUInt8(pos)
-        return struct.unpack(">B", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">B", self.buffer.bytes(), pos)
     end
 
     function getUInt16(pos)
-        return struct.unpack(">H", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">H", self.buffer.bytes(), pos)
     end
 
     function getUInt32(pos)
-        return struct.unpack(">I", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">I", self.buffer.bytes(), pos)
     end
 
     function getUInt64(pos)
-        return struct.unpack(">L", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">L", self.buffer.bytes(), pos)
     end
 
     function getFloat32(pos)
-        return struct.unpack(">f", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">f", self.buffer.bytes(), pos)
     end
 
     function getString(pos, len)
-        return struct.unpack(">c" .. len, self.buffer.bytes(), pos + 1)
+        return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
     end
 
     function slice(pos, len)
         local bytes = {}
 
         for i = pos, pos + len - 1 do
-            local byte = self.buffer.getByte(i + 1)
+            local byte = self.buffer.getByte(i)
             bytes[#bytes + 1] = byte
         end
 

@@ -18,7 +18,7 @@ end
 function love.load(args)
     local writer = Writer()
 
-    writer.writeBits({ 0, 0 })
+    writer.writeBits({ 1, 0 })
     writer.writeBits({ 0, 1, 0, 0, 1, 1, 0, 0 })
     writer.writeBits({ 0, 1, 0, 1 })
 
