@@ -5,6 +5,11 @@ local _PATH = (...):match("(.-)[^%.]+$")
 local ArrayBuffer = require(_PATH .. ".array_buffer")
 local DataView = require(_PATH .. ".data_view")
 
+local ffi = require("ffi")
+ffi.cdef[[
+double floor(double x);
+]]
+
 local function ensureSize(self, size)
     while self.view.byteLength() < self.pos + size do
         self.view = DataView(ArrayBuffer(self.view.byteLength() * 2))
@@ -53,11 +58,12 @@ Writer.new = function()
 
     function writeUVarint(val)
         local bit_val = bit.tobit(val)
-        if bit_val < 0x80 then
+        print("v", val)
+        if val < 0x80 then
             ensureSize(self, 1)
             self.view.setUInt8(self.pos, val)
             self.pos = self.pos + 1
-        elseif bit_val < 0x4000 then
+        elseif val < 0x4000 then
             ensureSize(self, 2)
             self.view.setUInt16(
                 self.pos, 
@@ -68,11 +74,12 @@ Writer.new = function()
                 )
             )
             self.pos = self.pos + 2
-        elseif bit_val < 0x20000 then
+        elseif val < 0x20000 then
             ensureSize(self, 3)
             self.view.setUInt8(
                 self.pos, 
-                bit.bor(bit.rshift(bit_val, 14), 0x80))
+                bit.bor(bit.rshift(bit_val, 14), 0x80)
+            )
             self.view.setUInt16(
                 self.pos + 1, 
                 bit.bor(
@@ -82,7 +89,7 @@ Writer.new = function()
                 )
             )
             self.pos = self.pos + 3
-        elseif bit_val < 0x10000000 then
+        elseif val < 0x10000000 then
             ensureSize(self, 4)
             self.view.setUInt32(
                 self.pos,
@@ -95,19 +102,46 @@ Writer.new = function()
                 )
             )
             self.pos = self.pos + 4
-        elseif bit_val < 0x800000000 then
-            --[[
-      this.ensureSize(5);
-      this.view.setUint8(this.pos, Math.floor(val / Math.pow(2, 28)) | 0x80);
-      this.view.setUint32(
-        this.pos + 1,
-        (val & 0x7f) | ((val & 0x3f80) << 1) | ((val & 0x1fc000) << 2) | ((val & 0xfe00000) << 3) | 0x80808000
-      );
-      this.pos += 5;
-            --]]
-            error("not implemented")
-        elseif bit_val < 0x40000000000 then
-            error("not implemented")
+        elseif val < 0x800000000 then
+            ensureSize(self, 5)
+            self.view.setUInt8(
+                self.pos, 
+                bit.bor(ffi.C.floor(val / math.pow(2, 28)), 0x80)
+            )
+            self.view.setUInt32(
+                self.pos + 1,
+                bit.bor(
+                    bit.band(bit_val, 0x7f), 
+                    bit.lshift(bit.band(bit_val, 0x3f80), 1), 
+                    bit.lshift(bit.band(bit_val, 0x1fc000), 2),
+                    bit.lshift(bit.band(bit_val, 0xfe00000), 3),
+                    0x80808000
+                )
+            )
+            self.pos = self.pos + 5
+        elseif val < 0x40000000000 then
+            print("6 BYTES")
+            ensureSize(self, 6)
+            local shifted_val = ffi.C.floor(val / math.pow(2, 28))
+            self.view.setUInt16(
+                self.pos, 
+                bit.bor(
+                    bit.band(shifted_val, 0x7f), 
+                    bit.lshift(bit.band(shifted_val, 0x3f80), 1), 
+                    0x8080
+                )
+            )
+            self.view.setUInt32(
+                self.pos + 2,
+                bit.bor(
+                    bit.band(val, 0x7f), 
+                    bit.lshift(bit.band(val, 0x3f80), 1), 
+                    bit.lshift(bit.band(val, 0x1fc000), 2),
+                    bit.lshift(bit.band(val, 0xfe00000), 3),
+                    0x80808000
+                )
+            )
+            self.pos = self.pos + 6
         else
             error("value out of range")
         end
