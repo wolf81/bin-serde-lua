@@ -25,7 +25,7 @@ local DataView = {}
 local function setBytes(buffer, offset, bytes)
     for i = 1, #bytes do
         local v = string.sub(bytes, i, i)
-        buffer.setByte(offset + i, v)
+        buffer.setByte(offset + i - 1, v)
     end
 end
 
@@ -40,32 +40,32 @@ function DataView.new(_, buffer)
 
     function setUInt8(pos, val)
         local bytes = struct.pack(">B", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(self.buffer, pos + 1, bytes)
     end
 
     function setUInt16(pos, val)
         local bytes = struct.pack(">H", val)
-        setBytes(self.buffer, pos, bytes)        
+        setBytes(self.buffer, pos + 1, bytes)        
     end
 
     function setUInt32(pos, val)
         local bytes = struct.pack(">I", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(self.buffer, pos + 1, bytes)
     end
 
     function setUInt64(pos, val)
         local bytes = struct.pack(">L", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(self.buffer, pos + 1, bytes)
     end
 
     function setFloat32(pos, val)
         local bytes = struct.pack(">f", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(self.buffer, pos + 1, bytes)
     end
 
     function setString(pos, val)
         local bytes = struct.pack(">c" .. #val, val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(self.buffer, pos + 1, bytes)
     end
 
     function getUInt8(pos)
@@ -92,6 +92,17 @@ function DataView.new(_, buffer)
         return struct.unpack(">c" .. len, self.buffer.bytes(), pos + 1)
     end
 
+    function slice(pos, len)
+        local bytes = {}
+
+        for i = pos, pos + len - 1 do
+            local byte = self.buffer.getByte(i + 1)
+            bytes[#bytes + 1] = byte
+        end
+
+        return bytes
+   end
+
     function toHex()
         return self.buffer.toHex()
     end
@@ -114,6 +125,7 @@ function DataView.new(_, buffer)
         getFloat32 = getFloat32,
         getString = getString,
 
+        slice = slice,
         toHex = toHex,
     }
 end

@@ -17,7 +17,7 @@ ArrayBuffer.new = function(_, length)
     local bytes = {}
 
     for i = 1, length do
-        bytes[#bytes + 1] = string.char(0x00)
+        bytes[i] = string.char(0x00)
     end
 
     local self = {
@@ -36,6 +36,10 @@ ArrayBuffer.new = function(_, length)
         self.bytes[pos] = val
     end
 
+    function getByte(pos)
+        return string.byte(self.bytes[pos])
+    end
+
     function toHex()
         return hex_dump(table.concat(self.bytes))
     end
@@ -44,6 +48,7 @@ ArrayBuffer.new = function(_, length)
         bytes = bytes,
         byteLength = byteLength,
         setByte = setByte,
+        getByte = getByte,
         toHex = toHex,
     }
 end

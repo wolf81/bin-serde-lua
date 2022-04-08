@@ -56,7 +56,6 @@ Writer.new = function()
 
     function writeUVarint(val)
         local bit_val = bit.tobit(val)
-        print("v", val)
         if val < 0x80 then
             ensureSize(self, 1)
             self.view.setUInt8(self.pos, val)
@@ -144,6 +143,10 @@ Writer.new = function()
         end
     end
 
+    function writeVarint(val)
+        error("not implemented")
+    end
+
     function writeFloat(val)
         ensureSize(self, 4)
         self.view.setFloat32(self.pos, val)
@@ -151,8 +154,6 @@ Writer.new = function()
     end
 
     function writeString(val)
-        print("utf8 size", utf8.len(val))
-        print("size", #val)
         if #val > 0 then
             local byteSize = #val
             writeUVarint(byteSize)
@@ -164,7 +165,27 @@ Writer.new = function()
         end
     end
 
-    function writeBits()
+    function writeBuffer(buf)
+        error("not implemented")
+    end
+
+    function writeBits(bits)
+        for i = 0, #bits - 1, 8 do
+            local byte = 0
+            for j = 0, 7 do
+                if (i + j == #bits) then
+                    break
+                end
+                byte = bit.bor(
+                    byte, 
+                    bit.lshift(bits[i + j + 1] == 1 and 1 or 0, j)
+                )
+            end
+            writeUInt8(byte)
+        end
+    end
+
+    function toBuffer()
         error("not implemented")
     end
 
@@ -176,9 +197,13 @@ Writer.new = function()
         writeUInt32 = writeUInt32,
         writeUInt64 = writeUInt64,
         writeUVarint = writeUVarint,
+        writeVarint = writeVarint,
         writeFloat = writeFloat,
         writeString = writeString,
+        writeBuffer = writeBuffer,
         writeBits = writeBits,
+
+        toBuffer = toBuffer,
     }
 end
 
@@ -237,6 +262,10 @@ Reader.new = function(_, view)
         end
     end
 
+    function readVarint()
+        error("not implemented")
+    end
+
     function readFloat()
         local v = self.view.getFloat32(self.pos)
         self.pos = self.pos + 4
@@ -253,8 +282,24 @@ Reader.new = function(_, view)
         return v
     end
 
-    function readBits()
+    function readBuffer()
         error("not implemented")
+    end
+
+    function readBits(num_bits)
+        local num_bytes = math.ceil(num_bits / 8)
+        local bytes = self.view.slice(self.pos, num_bytes)
+        local bits = {}
+        for _, byte in ipairs(bytes) do
+            for i = 0, 7 do
+                if #bits >= num_bits then break end
+                bits[#bits + 1] = bit.band(bit.rshift(byte, i), 1)
+            end
+        end
+        
+        self.pos = self.pos + num_bytes
+
+        return bits
     end
 
     function remaining()
@@ -269,8 +314,10 @@ Reader.new = function(_, view)
         readUInt32 = readUInt32,
         readUInt64 = readUInt64,
         readUVarint = readUVarint,
+        readVarint = readVarint,
         readFloat = readFloat,
         readString = readString,
+        readBuffer = readBuffer,
         readBits = readBits,
 
         remaining = remaining,
