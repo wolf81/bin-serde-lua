@@ -21,12 +21,12 @@ writer.writeBits({ 0, 1, 0, 1 }) -- array of binary data
 writer.writeUInt8(5) -- 8-bit unsigned int
 writer.writeUInt32(324) -- 32-bit unsigned int
 writer.writeUInt64(644423) -- 64-bit unsigned int
-writer.writeUVarint(12) -- variable sized int
+writer.writeUVarint(12) -- unsigned int of variable size
 writer.writeFloat(5.3324) -- 32-bit float
 writer.writeString("apple") -- string
-writer.writeUVarint(7757784722LL) -- add LL annotation for numbers larger than 4 bytes
+writer.writeUVarint(7757784722LL) -- add LL annotation for large unsigned integers (5+ bytes)
 
--- numbers greater than 6 bytes will raise an error
+-- numbers larger than 6 bytes are not supported and will raise an error
 ```
 
 In order to read, create an instance of the reader and use it as such:
@@ -44,5 +44,5 @@ reader.readString() -- apple
 reader.readUVarint() -- 7757784722
 ```
 
-Be aware that values need to be read in same order as these are written in the
-binary stream.
+Be aware that in order to decode properly, values need to be read in the same 
+order as they were written.
