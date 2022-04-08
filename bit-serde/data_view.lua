@@ -5,7 +5,8 @@ local struct = require(_PATH .. ".struct")
 local DataView = {}
 
 --[[
->
+> little endian
+< big endian
 "b" a signed char.
 "B" an unsigned char.
 "h" a signed short (2 bytes).
@@ -27,23 +28,10 @@ local function setBytes(buffer, offset, bytes)
     end
 end
 
-local function convertStringToByteArray(str)
-  local byteArray = {}
-  for i = 1, #str do
-    local c = string.sub(str, i, i)
-    table.insert(byteArray, string.byte(c))
-  end
-  
-  return byteArray
-end
-
 function DataView.new(_, buffer)
     local self = {
         buffer = buffer or ArrayBuffer(),
     }
-
-    print("buffer", self.buffer, #self.buffer)
-    print()
 
     function buffer()
         return self.buffer

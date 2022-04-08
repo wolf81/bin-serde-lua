@@ -1,10 +1,10 @@
 local utf8 = require "utf8"
 
 local _PATH = (...):match("(.-)[^%.]+$") 
-
 local ArrayBuffer = require(_PATH .. ".array_buffer")
 local DataView = require(_PATH .. ".data_view")
 
+-- use C function for numbers greater than 32-bit
 local ffi = require("ffi")
 ffi.cdef[[
 double floor(double x);
@@ -19,8 +19,6 @@ end
 local Writer = {}
 
 Writer.new = function()
-    print("new writer")
-
     local buffer = ArrayBuffer(64)
 
     local self = {
@@ -191,8 +189,6 @@ setmetatable(Writer, {
 local Reader = {}
 
 Reader.new = function(_, view)
-    print("new reader")
-
     local self = {
         pos = 1,
         view = view,
