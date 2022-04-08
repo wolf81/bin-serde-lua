@@ -194,7 +194,13 @@ Writer.new = function()
     end
 
     function toBuffer()
-        error("not implemented")
+        local buffer = ArrayBuffer(self.pos)
+        for i = 0, self.pos do
+            local b = string.char(self.view.buffer().getByte(i))
+            buffer.setByte(i, b)
+        end
+
+        return buffer.bytes()
     end
 
     return {

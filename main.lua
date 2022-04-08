@@ -28,6 +28,8 @@ function love.load(args)
     writer.writeUVarint(12)
     writer.writeUVarint(123334)
     writer.writeFloat(5.3324)
+    local buffer = writer.toBuffer()
+
     writer.writeString("apple")
     writer.writeString("pear")
     writer.writeUVarint(7757784722ULL) -- 5 bytes
@@ -59,12 +61,11 @@ function love.load(args)
     print(reader.readUVarint())
     print(reader.readVarint())
 
-    local dt = reader.readBuffer(#data)
-    print(table.concat(dt, ','))
-    -- printBits(dt)
-    -- for _, v in ipairs(dt) do
-    --     print(v)
-    -- end
+    print(table.concat(reader.readBuffer(#data), ','))
+
+    local writer2 = Writer()
+    writer2.writeBuffer(buffer)
+    print(writer2.dataView().toHex())
 
     print("remaining " .. reader.remaining() .. " bytes")
 end
