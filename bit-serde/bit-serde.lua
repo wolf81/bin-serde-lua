@@ -120,7 +120,6 @@ Writer.new = function()
             )
             self.pos = self.pos + 5
         elseif val < 0x40000000000 then
-            print("6 BYTES")
             ensureSize(self, 6)
             local shifted_val = ffi.C.floor(val / math.pow(2, 28))
             self.view.setUInt16(
