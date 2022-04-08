@@ -190,7 +190,7 @@ local Reader = {}
 
 Reader.new = function(_, view)
     local self = {
-        pos = 1,
+        pos = 0,
         view = view,
     }
 
@@ -257,6 +257,10 @@ Reader.new = function(_, view)
         error("not implemented")
     end
 
+    function remaining()
+        return self.view.byteLength() - self.pos
+    end
+
     return {
         dataView = dataView,
 
@@ -268,6 +272,8 @@ Reader.new = function(_, view)
         readFloat = readFloat,
         readString = readString,
         readBits = readBits,
+
+        remaining = remaining,
     }
 end
 

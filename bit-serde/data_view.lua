@@ -7,6 +7,7 @@ local DataView = {}
 --[[
 > little endian
 < big endian
+
 "b" a signed char.
 "B" an unsigned char.
 "h" a signed short (2 bytes).
@@ -68,27 +69,27 @@ function DataView.new(_, buffer)
     end
 
     function getUInt8(pos)
-        return struct.unpack(">B", self.buffer.bytes(), pos)
+        return struct.unpack(">B", self.buffer.bytes(), pos + 1)
     end
 
     function getUInt16(pos)
-        return struct.unpack(">H", self.buffer.bytes(), pos)
+        return struct.unpack(">H", self.buffer.bytes(), pos + 1)
     end
 
     function getUInt32(pos)
-        return struct.unpack(">I", self.buffer.bytes(), pos)
+        return struct.unpack(">I", self.buffer.bytes(), pos + 1)
     end
 
     function getUInt64(pos)
-        return struct.unpack(">L", self.buffer.bytes(), pos)
+        return struct.unpack(">L", self.buffer.bytes(), pos + 1)
     end
 
     function getFloat32(pos)
-        return struct.unpack(">f", self.buffer.bytes(), pos)
+        return struct.unpack(">f", self.buffer.bytes(), pos + 1)
     end
 
     function getString(pos, len)
-        return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
+        return struct.unpack(">c" .. len, self.buffer.bytes(), pos + 1)
     end
 
     function toHex()

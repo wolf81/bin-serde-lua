@@ -17,7 +17,7 @@ function love.load(args)
     writer.writeString("pear")
     writer.writeUVarint(7757784722LL) -- 5 bytes
     writer.writeString("a")
-    writer.writeUVarint(77577847222LL) -- 6 bytes
+    writer.writeUVarint(3757784722241LL) -- 6 bytes
 
     local reader = Reader(writer.dataView())
 
@@ -34,4 +34,6 @@ function love.load(args)
     print(reader.readUVarint())
     print(reader.readString())    
     print(reader.readUVarint())
+
+    print("remaining " .. reader.remaining() .. " bytes")
 end
