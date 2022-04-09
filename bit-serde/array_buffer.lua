@@ -1,9 +1,5 @@
 local ArrayBuffer = {}
 
-local function replace_char(pos, str, r)
-    return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
-end
-
 local function hex_dump(buf)
     for i=1,math.ceil(#buf/16) * 16 do
         if (i-1) % 16 == 0 then io.write(string.format('%08X  ', i-1)) end
