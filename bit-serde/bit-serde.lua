@@ -177,7 +177,7 @@ Writer.new = function()
 
         for i = 1, #buf do
             local byte = string.sub(buf, i, i)
-            self.view.setByte(self.pos + i, byte)
+            self.view.setByte(self.pos + i - 1, byte)
         end
 
         self.pos = self.pos + #buf

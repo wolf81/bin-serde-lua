@@ -39,10 +39,14 @@ function love.load(args)
     writer.writeUVarint(3757784722241ULL) -- 6 bytes
     writer.writeVarint(-1322223422322LL) 
 
-    local data = string.char(0x00, 0x01, 0x02, 0x03, 0xFF)
+    local data = string.char(0x00, 0xDE, 0xAD, 0xBE, 0xEF)
     writer.writeBuffer(data)
     writer.writeBuffer(data)
+
+    -- grow buffer to 128 bytes
     writer.writeBuffer(data)
+
+    -- TODO: reader & writer should be able to use same data view object
 
     local reader = Reader(writer.dataView())
 
