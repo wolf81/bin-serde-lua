@@ -29,6 +29,7 @@ function love.load(args)
     writer.writeUVarint(123334)
     writer.writeFloat(5.3324)
     local buffer = writer.toBuffer()
+    print("buf", buffer)
 
     writer.writeString("apple")
     writer.writeString("pear")
