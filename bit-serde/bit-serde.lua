@@ -302,7 +302,8 @@ Reader.new = function(_, view)
     function readBuffer(num_bytes)
         local bytes = self.view.slice(self.pos, num_bytes)
         self.pos = self.pos + num_bytes
-        return bytes
+        return string.char(unpack(bytes))
+        --return table.concat(bytes, ",")
     end
 
     function readBits(num_bits)

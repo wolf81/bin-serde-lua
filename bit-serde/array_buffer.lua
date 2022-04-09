@@ -25,6 +25,7 @@ ArrayBuffer.new = function(_, length)
     }
 
     function bytes()
+        -- TODO: should be of type string.char()
         return table.concat(self.bytes)
     end
 

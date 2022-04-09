@@ -60,8 +60,7 @@ function love.load(args)
     print(reader.readString())    
     print(reader.readUVarint())
     print(reader.readVarint())
-
-    print(table.concat(reader.readBuffer(#data), ','))
+    print(reader.readBuffer(#data))
 
     local writer2 = Writer()
     writer2.writeBuffer(buffer)
