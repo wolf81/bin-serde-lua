@@ -36,7 +36,7 @@ function love.load(args)
     writer.writeString("pear")
     writer.writeUVarint(7757784722ULL) -- 5 bytes
     writer.writeString("a")
-    writer.writeUVarint(3757784722241LL) -- 6 bytes
+    writer.writeUVarint(3757784722241ULL) -- 6 bytes
     writer.writeVarint(-1322223422322LL) 
 
     local data = string.char(0x00, 0x01, 0x02, 0x03, 0xFF)

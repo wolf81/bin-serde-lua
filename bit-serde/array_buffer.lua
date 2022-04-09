@@ -38,8 +38,7 @@ ArrayBuffer.new = function(_, length)
     end
 
     function getByte(pos)
-        local b = self.bytes[pos]
-        return b
+        return self.bytes[pos]
     end
 
     function slice(pos, len)
