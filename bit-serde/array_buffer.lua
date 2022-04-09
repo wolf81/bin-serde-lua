@@ -12,11 +12,14 @@ end
 ArrayBuffer.new = function(_, length)
     local bytes = {}
 
+    -- we need to use the default Lua 1-indexing here for table.concat to work
+    -- properly
     for i = 1, length do
         bytes[i] = string.char(0x00)
     end
 
     local self = {
+        length = length,
         bytes = bytes,
     }
 
@@ -26,10 +29,12 @@ ArrayBuffer.new = function(_, length)
     end
 
     function byteLength()
-        return #self.bytes
+        return self.length
     end    
 
     function setByte(pos, val)
+        assert(pos < self.length + 1, "out of range")
+        
         self.bytes[pos] = val
     end
 
