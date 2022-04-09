@@ -194,11 +194,13 @@ Writer.new = function()
     end
 
     function toBuffer()
-        local buffer = {}
+        local s = string.char()
+
         for i = 0, self.pos do
-            buffer[#buffer + 1] = self.view.buffer().getByte(i)
+            s = s .. self.view.buffer().getByte(i + 1)
         end
-        return string.char(unpack(buffer))
+
+        return s
     end
 
     return {

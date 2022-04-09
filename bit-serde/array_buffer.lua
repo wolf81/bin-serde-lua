@@ -38,14 +38,15 @@ ArrayBuffer.new = function(_, length)
     end
 
     function getByte(pos)
-        return string.byte(self.bytes[pos])
+        local b = self.bytes[pos]
+        return b
     end
 
     function slice(pos, len)
         local bytes = {}
 
         for i = pos, pos + len - 1 do
-            bytes[#bytes + 1] = string.byte(self.bytes[i + 1])
+            bytes[#bytes + 1] = string.byte(self.bytes[i])
         end
 
         return bytes
