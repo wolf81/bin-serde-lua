@@ -10,7 +10,13 @@ double floor(double x);
 
 local function ensureSize(self, size)
     while self.view.byteLength() < self.pos + size do
-        self.view = DataView(ArrayBuffer(self.view.byteLength() * 2))
+        local view = DataView(ArrayBuffer(self.view.byteLength() * 2))
+
+        for i = 0, self.view.byteLength() do
+            view.setByte(i, self.view.getByte(i))
+        end
+
+        self.view = view
     end
 end
 

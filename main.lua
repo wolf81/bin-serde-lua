@@ -41,6 +41,8 @@ function love.load(args)
 
     local data = string.char(0x00, 0x01, 0x02, 0x03, 0xFF)
     writer.writeBuffer(data)
+    writer.writeBuffer(data)
+    writer.writeBuffer(data)
 
     local reader = Reader(writer.dataView())
 
