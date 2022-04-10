@@ -177,7 +177,7 @@ Writer.new = function()
 
         for i = 1, #buf do
             local byte = string.sub(buf, i, i)
-            self.view.setByte(self.pos + i - 1, byte)
+            self.view.setByte(self.pos + i, byte)
         end
 
         self.pos = self.pos + #buf
@@ -200,13 +200,14 @@ Writer.new = function()
     end
 
     local function toBuffer()
-        local s = string.char()
+        return self.view.buffer().bytes()
+        -- local s = string.char()
 
-        for i = 0, self.pos do
-            s = s .. self.view.buffer().getByte(i + 1)
-        end
+        -- for i = 0, self.pos do
+        --     s = s .. self.view.buffer().getByte(i + 1)
+        -- end
 
-        return s
+        -- return s
     end
 
     return setmetatable({

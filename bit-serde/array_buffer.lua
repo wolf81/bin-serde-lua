@@ -24,7 +24,7 @@ ArrayBuffer.new = function(_, length)
     }
 
     local function bytes()
-        -- TODO: should be of type string.char()
+        -- TODO: should be of type string.char() ?
         return table.concat(self.bytes)
     end
 
@@ -45,8 +45,8 @@ ArrayBuffer.new = function(_, length)
     local function slice(pos, len)
         local bytes = {}
 
-        for i = pos, pos + len - 1 do
-            bytes[#bytes + 1] = string.byte(self.bytes[i])
+        for i = pos, pos + len do
+            bytes[#bytes + 1] = string.byte(self.bytes[i + 1])
         end
 
         return bytes

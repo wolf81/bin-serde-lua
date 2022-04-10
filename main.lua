@@ -18,9 +18,9 @@ end
 function love.load(args)
     local writer = Writer()
 
-    writer.writeBits({ 0, 0 })
+    writer.writeBits({ 1, 0, 0, 0, 1, 0, 0, 0 })
     writer.writeBits({ 1, 1, 0, 0, 0, 0, 1, 1 })
-    writer.writeBits({ 0, 1, 1, 0 })
+    writer.writeBits({ 0, 1, 1, 0, 0, 1, 1, 0 })
 
     writer.writeUInt8(5)
     writer.writeUInt32(324)
@@ -29,7 +29,7 @@ function love.load(args)
     writer.writeUVarint(123334)
     writer.writeFloat(5.3324)
 
-    -- copy buffer at this position, so we can write this data to a new writer
+    -- -- copy buffer at this position, so we can write this data to a new writer
     local buffer = writer.toBuffer()
 
     writer.writeString("apple")
@@ -70,7 +70,7 @@ function love.load(args)
     print(reader.readVarint())
     print(reader.readBuffer(#data))
 
-    -- here we copy the previously copied buffer to new writer and log result
+    -- -- here we copy the previously copied buffer to new writer and log result
     local writer2 = Writer()
     writer2.writeBuffer(buffer)
     print(writer2.dataView().toHex())

@@ -22,17 +22,16 @@ local DataView = {}
 "cn" a sequence of exactly n chars corresponding to a single Lua string (if n <= 0 then for packing - the string length is taken, unpacking - the number value of the previous unpacked value which is not returned).
 --]]
 
-local function setBytes(buffer, offset, bytes)
-    for i = 1, #bytes do
-        local v = string.sub(bytes, i, i)
-        buffer.setByte(offset + i - 1, v)
-    end
-end
-
 function DataView.new(_, buffer)
     local self = {
         buffer = buffer or ArrayBuffer(),
     }
+
+    local function setBytes(offset, bytes)
+        for i = 1, #bytes do
+            self.buffer.setByte(offset + i, string.sub(bytes, i, i))
+        end
+    end
 
     local function buffer()
         return self.buffer
@@ -44,32 +43,32 @@ function DataView.new(_, buffer)
 
     local function setUInt8(pos, val)
         local bytes = struct.pack(">B", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(pos, bytes)
     end
 
     local function setUInt16(pos, val)
         local bytes = struct.pack(">H", val)
-        setBytes(self.buffer, pos, bytes)        
+        setBytes(pos, bytes)        
     end
 
     local function setUInt32(pos, val)
         local bytes = struct.pack(">I", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(pos, bytes)
     end
 
     local function setUInt64(pos, val)
         local bytes = struct.pack(">L", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(pos, bytes)
     end
 
     local function setFloat32(pos, val)
         local bytes = struct.pack(">f", val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(pos, bytes)
     end
 
     local function setString(pos, val)
         local bytes = struct.pack(">c" .. #val, val)
-        setBytes(self.buffer, pos, bytes)
+        setBytes(pos, bytes)
     end
 
     local function setByte(pos, val)
@@ -77,27 +76,27 @@ function DataView.new(_, buffer)
     end
 
     local function getUInt8(pos)
-        return struct.unpack(">B", self.buffer.bytes(), pos)
+        return struct.unpack(">B", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt16(pos)
-        return struct.unpack(">H", self.buffer.bytes(), pos)
+        return struct.unpack(">H", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt32(pos)
-        return struct.unpack(">I", self.buffer.bytes(), pos)
+        return struct.unpack(">I", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt64(pos)
-        return struct.unpack(">L", self.buffer.bytes(), pos)
+        return struct.unpack(">L", self.buffer.bytes(), pos + 1)
     end
 
     local function getFloat32(pos)
-        return struct.unpack(">f", self.buffer.bytes(), pos)
+        return struct.unpack(">f", self.buffer.bytes(), pos + 1)
     end
 
     local function getString(pos, len)
-        return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
+        return struct.unpack(">c" .. len, self.buffer.bytes(), pos + 1)
     end
 
     local function getByte(pos)
