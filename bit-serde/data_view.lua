@@ -34,81 +34,85 @@ function DataView.new(_, buffer)
         buffer = buffer or ArrayBuffer(),
     }
 
-    function buffer()
+    local function buffer()
         return self.buffer
     end
 
-    function setUInt8(pos, val)
+    local function byteLength()
+       return self.buffer.byteLength()
+    end
+
+    local function setUInt8(pos, val)
         local bytes = struct.pack(">B", val)
         setBytes(self.buffer, pos, bytes)
     end
 
-    function setUInt16(pos, val)
+    local function setUInt16(pos, val)
         local bytes = struct.pack(">H", val)
         setBytes(self.buffer, pos, bytes)        
     end
 
-    function setUInt32(pos, val)
+    local function setUInt32(pos, val)
         local bytes = struct.pack(">I", val)
         setBytes(self.buffer, pos, bytes)
     end
 
-    function setUInt64(pos, val)
+    local function setUInt64(pos, val)
         local bytes = struct.pack(">L", val)
         setBytes(self.buffer, pos, bytes)
     end
 
-    function setFloat32(pos, val)
+    local function setFloat32(pos, val)
         local bytes = struct.pack(">f", val)
         setBytes(self.buffer, pos, bytes)
     end
 
-    function setString(pos, val)
+    local function setString(pos, val)
         local bytes = struct.pack(">c" .. #val, val)
         setBytes(self.buffer, pos, bytes)
     end
 
-    function setByte(pos, val)
+    local function setByte(pos, val)
         self.buffer.setByte(pos, val)
     end
 
-    function getUInt8(pos)
+    local function getUInt8(pos)
         return struct.unpack(">B", self.buffer.bytes(), pos)
     end
 
-    function getUInt16(pos)
+    local function getUInt16(pos)
         return struct.unpack(">H", self.buffer.bytes(), pos)
     end
 
-    function getUInt32(pos)
+    local function getUInt32(pos)
         return struct.unpack(">I", self.buffer.bytes(), pos)
     end
 
-    function getUInt64(pos)
+    local function getUInt64(pos)
         return struct.unpack(">L", self.buffer.bytes(), pos)
     end
 
-    function getFloat32(pos)
+    local function getFloat32(pos)
         return struct.unpack(">f", self.buffer.bytes(), pos)
     end
 
-    function getString(pos, len)
+    local function getString(pos, len)
         return struct.unpack(">c" .. len, self.buffer.bytes(), pos)
     end
 
-    function getByte(pos)
+    local function getByte(pos)
         return self.buffer.getByte(pos)
     end
 
-    function slice(pos, len)
+    local function slice(pos, len)
         return self.buffer.slice(pos, len)
     end
 
-    function toHex()
+    local function toHex()
         return self.buffer.toHex()
     end
 
-    return {
+    return setmetatable({
         buffer = buffer,
         byteLength = byteLength,
 
@@ -130,7 +134,7 @@ function DataView.new(_, buffer)
 
         slice = slice,
         toHex = toHex,
-    }
+    }, DataView)
 end
 
 setmetatable(DataView, {

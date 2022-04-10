@@ -23,26 +23,26 @@ ArrayBuffer.new = function(_, length)
         bytes = bytes,
     }
 
-    function bytes()
+    local function bytes()
         -- TODO: should be of type string.char()
         return table.concat(self.bytes)
     end
 
-    function byteLength()
+    local function byteLength()
         return self.length
     end    
 
-    function setByte(pos, val)
+    local function setByte(pos, val)
         assert(pos < self.length + 1, "out of range")
         
         self.bytes[pos] = val
     end
 
-    function getByte(pos)
+    local function getByte(pos)
         return self.bytes[pos]
     end
 
-    function slice(pos, len)
+    local function slice(pos, len)
         local bytes = {}
 
         for i = pos, pos + len - 1 do
@@ -52,18 +52,18 @@ ArrayBuffer.new = function(_, length)
         return bytes
    end
 
-    function toHex()
+    local function toHex()
         return hex_dump(table.concat(self.bytes))
     end
 
-    return {
+    return setmetatable({
         bytes = bytes,
         byteLength = byteLength,
         setByte = setByte,
         getByte = getByte,
         slice = slice,
         toHex = toHex,
-    }
+    }, ArrayBuffer)
 end
 
 setmetatable(ArrayBuffer, {

@@ -30,35 +30,35 @@ Writer.new = function()
         view = DataView(buffer),
     }
 
-    function dataView()
+    local function dataView()
         return self.view
     end
 
-    function writeUInt8(val)
+    local function writeUInt8(val)
         ensureSize(self, 1)
         self.view.setUInt8(self.pos, val)
         self.pos = self.pos + 1
     end
 
-    function writeUInt16(val)
+    local function writeUInt16(val)
         ensureSize(self, 2)
         self.view.setUInt8(self.pos, val)
         self.pos = self.pos + 2
     end
 
-    function writeUInt32(val)
+    local function writeUInt32(val)
         ensureSize(self, 4)
         self.view.setUInt32(self.pos, val)
         self.pos = self.pos + 4
     end
 
-    function writeUInt64(val)
+    local function writeUInt64(val)
         ensureSize(self, 8)
         self.view.setUInt64(self.pos, val)
         self.pos = self.pos + 8
     end
 
-    function writeUVarint(val)
+    local function writeUVarint(val)
         local bit_val = bit.tobit(val)
         if val < 0x80 then
             ensureSize(self, 1)
@@ -147,20 +147,20 @@ Writer.new = function()
         end
     end
 
-    function writeVarint(val)
+    local function writeVarint(val)
         local r1 = bit.arshift(val, 0x3f)
         local r2 = bit.lshift(val, 0x1)
         local n = bit.bxor(r1, r2)
         writeUVarint(n)
     end
 
-    function writeFloat(val)
+    local function writeFloat(val)
         ensureSize(self, 4)
         self.view.setFloat32(self.pos, val)
         self.pos = self.pos + 4
     end
 
-    function writeString(val)
+    local function writeString(val)
         if #val > 0 then
             local byteSize = #val
             writeUVarint(byteSize)
@@ -172,7 +172,7 @@ Writer.new = function()
         end
     end
 
-    function writeBuffer(buf)
+    local function writeBuffer(buf)
         ensureSize(self, #buf)
 
         for i = 1, #buf do
@@ -183,7 +183,7 @@ Writer.new = function()
         self.pos = self.pos + #buf
     end
 
-    function writeBits(bits)
+    local function writeBits(bits)
         for i = 0, #bits - 1, 8 do
             local byte = 0
             for j = 0, 7 do
@@ -199,7 +199,7 @@ Writer.new = function()
         end
     end
 
-    function toBuffer()
+    local function toBuffer()
         local s = string.char()
 
         for i = 0, self.pos do
@@ -209,7 +209,7 @@ Writer.new = function()
         return s
     end
 
-    return {
+    return setmetatable({
         dataView = dataView,        
 
         writeUInt8 = writeUInt8,
@@ -224,7 +224,7 @@ Writer.new = function()
         writeBits = writeBits,
 
         toBuffer = toBuffer,
-    }
+    }, Writer)
 end
 
 setmetatable(Writer, {
@@ -239,35 +239,35 @@ Reader.new = function(_, view)
         view = view,
     }
 
-    function dataView()
+    local function dataView()
         return self.view
     end
 
-    function readUInt8()
+    local function readUInt8()
         local v = self.view.getUInt8(self.pos)
         self.pos = self.pos + 1
         return v
     end
 
-    function readUInt16()
+    local function readUInt16()
         local v = self.view.getUInt16(self.pos)
         self.pos = self.pos + 2
         return v
     end
 
-    function readUInt32()
+    local function readUInt32()
         local v = self.view.getUInt32(self.pos)
         self.pos = self.pos + 4
         return v
     end
 
-    function readUInt64()
+    local function readUInt64()
         local v = self.view.getUInt64(self.pos)
         self.pos = self.pos + 8
         return v
     end
 
-    function readUVarint()
+    local function readUVarint()
         local val = 0
 
         while true do
@@ -282,20 +282,20 @@ Reader.new = function(_, view)
         end
     end
 
-    function readVarint()
+    local function readVarint()
         local val = readUVarint() * 1LL
         local r1 = bit.rshift(val, 0x1)
         local r2 = -(bit.band(val, 0x1))
         return bit.bxor(r1, r2)
     end
 
-    function readFloat()
+    local function readFloat()
         local v = self.view.getFloat32(self.pos)
         self.pos = self.pos + 4
         return v
     end
 
-    function readString()
+    local function readString()
         local len = readUVarint()
         
         if len == 0 then return "" end
@@ -305,13 +305,13 @@ Reader.new = function(_, view)
         return v
     end
 
-    function readBuffer(num_bytes)
+    local function readBuffer(num_bytes)
         local bytes = self.view.slice(self.pos, num_bytes)
         self.pos = self.pos + num_bytes
         return string.char(unpack(bytes))
     end
 
-    function readBits(num_bits)
+    local function readBits(num_bits)
         local num_bytes = math.ceil(num_bits / 8)
         local bytes = self.view.slice(self.pos, num_bytes)
         local bits = {}
@@ -327,11 +327,11 @@ Reader.new = function(_, view)
         return bits
     end
 
-    function remaining()
+    local function remaining()
         return self.view.byteLength() - self.pos
     end
 
-    return {
+    return setmetatable({
         dataView = dataView,
 
         readUInt8 = readUInt8,
@@ -346,7 +346,7 @@ Reader.new = function(_, view)
         readBits = readBits,
 
         remaining = remaining,
-    }
+    }, Reader)
 end
 
 setmetatable(Reader, {
