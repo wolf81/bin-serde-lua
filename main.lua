@@ -1,6 +1,6 @@
 io.stdout:setvbuf('no') -- show debug output live in SublimeText console
 
-local serde = require "bit-serde"
+local serde = require "bin-serde"
 local Writer = serde.Writer
 local Reader = serde.Reader
 

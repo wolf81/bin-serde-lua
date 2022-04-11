@@ -1,4 +1,4 @@
-# bit-serde-lua
+# bin-serde-lua
 
 Lua port of [bin-serde-ts](https://github.com/hathora/bin-serde-ts)
 
@@ -8,7 +8,7 @@ In order to use this library first add this library somewhere in your project
 and import the library as such:
 
 ```lua
-local serde = require "bit-serde"
+local serde = require "bin-serde"
 ```
 
 Then, whenever you want to encode some data in the binary format, create a 
