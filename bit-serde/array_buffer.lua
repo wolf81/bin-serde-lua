@@ -19,13 +19,17 @@ ArrayBuffer.new = function(_, length)
     end
 
     local self = {
+        is_dirty = false,
         length = length,
-        bytes = bytes,
+        bytes = table.concat(bytes),
     }
 
+    local function replace_char(pos, str, r)
+        return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
+    end
+
     local function bytes()
-        -- TODO: should be of type string.char() ?
-        return table.concat(self.bytes)
+        return self.bytes
     end
 
     local function byteLength()
@@ -34,26 +38,37 @@ ArrayBuffer.new = function(_, length)
 
     local function setByte(pos, val)
         assert(pos < self.length + 1, "out of range")
-        
-        self.bytes[pos] = val
+
+        self.bytes = replace_char(pos, self.bytes, val)
     end
 
     local function getByte(pos)
-        return self.bytes[pos]
+        return string.sub(self.bytes, pos, pos)
     end
 
     local function slice(pos, len)
-        local bytes = {}
+        local bytes = string.sub(self.bytes, pos, pos + len)
 
-        for i = pos, pos + len do
-            bytes[#bytes + 1] = string.byte(self.bytes[i + 1])
+        t = {}
+
+        for i = 1, string.len(bytes) do
+            t[i]= string.byte(string.sub(bytes, i, i))
         end
 
-        return bytes
+        return t
    end
 
     local function toHex()
-        return hex_dump(table.concat(self.bytes))
+        local s = string.char()
+
+        for i = 1, self.length do
+            s = s .. string.sub(self.bytes, i, i)
+        end
+
+        -- not sure why, but self.bytes doesn't seem to work 
+        -- properly here, even though it should be a string 
+        -- of chars
+        return hex_dump(s)
     end
 
     return setmetatable({
