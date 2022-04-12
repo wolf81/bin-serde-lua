@@ -2,6 +2,10 @@
 
 Lua port of [bin-serde-ts](https://github.com/hathora/bin-serde-ts)
 
+# Example
+
+A LÖVE example can be found in the example directory. 
+
 # Usage
 
 In order to use this library first add this library somewhere in your project 

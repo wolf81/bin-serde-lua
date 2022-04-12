@@ -1,2 +1,2 @@
 run:
-	love .
+	cd example && love .

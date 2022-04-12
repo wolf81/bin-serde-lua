@@ -1,6 +1,9 @@
 io.stdout:setvbuf('no') -- show debug output live in SublimeText console
 
-local serde = require "bin-serde"
+-- lookup in parent directory, bin-serde directory
+package.path = package.path .. ';../?.lua;../bin-serde/?.lua'
+
+local serde = require "../bin-serde/bin-serde"
 local Writer = serde.Writer
 local Reader = serde.Reader
 

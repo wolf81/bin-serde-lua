@@ -1,5 +1,4 @@
 local _PATH = (...):match("(.-)[^%.]+$") 
-
 local struct = require(_PATH .. ".struct")
 
 local DataView = {}
