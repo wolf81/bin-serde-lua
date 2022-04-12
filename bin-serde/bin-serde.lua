@@ -175,8 +175,8 @@ Writer.new = function()
     local function writeBuffer(buf)
         ensureSize(self, #buf)
 
-        for i = 1, string.len(buf) do
-            local byte = string.sub(buf, i, i)
+        for i = 0, string.len(buf) - 1 do
+            local byte = string.sub(buf, i + 1, i + 1)
             self.view.setByte(self.pos + i, byte)
         end
 
@@ -187,7 +187,7 @@ Writer.new = function()
         for i = 0, #bits - 1, 8 do
             local byte = 0
             for j = 0, 7 do
-                if (i + j == #bits) then
+                if i + j == #bits then
                     break
                 end
                 byte = bit.bor(
@@ -201,13 +201,6 @@ Writer.new = function()
 
     local function toBuffer()
         return self.view.buffer().bytes()
-        -- local s = string.char()
-
-        -- for i = 0, self.pos do
-        --     s = s .. self.view.buffer().getByte(i + 1)
-        -- end
-
-        -- return s
     end
 
     return setmetatable({
@@ -324,7 +317,6 @@ Reader.new = function(_, view)
         end
         
         self.pos = self.pos + num_bytes
-
         return bits
     end
 

@@ -72,7 +72,7 @@ function DataView.new(_, buffer)
     end
 
     local function setByte(pos, val)
-        self.buffer.setByte(pos, val)
+        self.buffer.setByte(pos + 1, val)
     end
 
     local function getUInt8(pos)
@@ -100,11 +100,11 @@ function DataView.new(_, buffer)
     end
 
     local function getByte(pos)
-        return self.buffer.getByte(pos)
+        return self.buffer.getByte(pos + 1)
     end
 
     local function slice(pos, len)
-        return self.buffer.slice(pos, len)
+        return self.buffer.slice(pos + 1, len)
     end
 
     local function toHex()

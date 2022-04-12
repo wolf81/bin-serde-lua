@@ -37,7 +37,7 @@ ArrayBuffer.new = function(_, length)
     end    
 
     local function setByte(pos, val)
-        assert(pos < self.length + 1, "out of range")
+        assert(pos > 0 and pos <= self.length, "out of range")
 
         self.bytes = replace_char(pos, self.bytes, val)
     end
@@ -52,7 +52,7 @@ ArrayBuffer.new = function(_, length)
         t = {}
 
         for i = 1, string.len(bytes) do
-            t[i]= string.byte(string.sub(bytes, i, i))
+            t[i] = string.byte(string.sub(bytes, i, i))
         end
 
         return t

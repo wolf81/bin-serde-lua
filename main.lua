@@ -52,9 +52,9 @@ function love.load(args)
 
     print(reader.dataView().toHex())
 
-    printBits(reader.readBits(2))
     printBits(reader.readBits(8))
-    printBits(reader.readBits(4))
+    printBits(reader.readBits(8))
+    printBits(reader.readBits(8))
 
     print(reader.readUInt8())
     print(reader.readUInt32())
