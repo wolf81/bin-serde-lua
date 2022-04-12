@@ -1,2 +1,2 @@
-test:
-	busted -- example	
+run:
+	cd example; love . ; cd -

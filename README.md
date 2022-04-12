@@ -1,5 +1,3 @@
-![build status](https://github.com/wolf81/bin-serde-lua/workflows/test/badge.svg)
-
 # bin-serde-lua
 
 Lua port of [bin-serde-ts](https://github.com/hathora/bin-serde-ts)
