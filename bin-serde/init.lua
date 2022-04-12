@@ -29,5 +29,7 @@ local M = {
 
 M.Writer = serde.Writer
 M.Reader = serde.Reader
+M.DataView = serde.DataView
+M.ArrayBuffer = serde.ArrayBuffer
 
 return M

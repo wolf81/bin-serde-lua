@@ -349,4 +349,6 @@ setmetatable(Reader, {
 return {
     Writer = Writer,
     Reader = Reader,
+    DataView = DataView,
+    ArrayBuffer = ArrayBuffer,
 }
