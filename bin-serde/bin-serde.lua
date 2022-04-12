@@ -59,7 +59,7 @@ Writer.new = function()
     end
 
     local function writeUVarint(val)
-        local bit_val = bit.tobit(val)
+        local bit_val = bit.tobit(ffi.C.floor(val))
         if val < 0x80 then
             ensureSize(self, 1)
             self.view.setUInt8(self.pos, val)
