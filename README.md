@@ -12,14 +12,14 @@ In order to use this library first add this library somewhere in your project
 and import the library as such:
 
 ```lua
-local serde = require "bin-serde"
+local serde = require "bin-serde-lua"
 ```
 
 Then, whenever you want to encode some data in the binary format, create a 
 writer instance and write using appropriate data types, as such:
 
 ```lua
-local writer = serde.Writer()
+local writer = serde.coder.Writer()
 
 writer.writeBits({ 0, 1, 0, 1 }) -- array of binary data
 writer.writeUInt8(5) -- 8-bit unsigned int
@@ -36,7 +36,7 @@ writer.writeUVarint(7757784722LL) -- add LL annotation for large unsigned intege
 In order to read, create an instance of the reader and use it as such:
 
 ```lua
-local reader = serde.Reader()
+local reader = serde.coder.Reader()
 
 reader.readBits(4) -- { 0, 1, 0, 1 }
 reader.readUInt8() -- 5
