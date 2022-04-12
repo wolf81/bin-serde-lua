@@ -1,6 +1,8 @@
 local _PATH = (...):gsub('%.init$', '')
 
-local serde = {
+local serde = require(_PATH .. ".bin-serde")
+
+local M = {
     _VERSION = "0.1.0",
     _DESCRIPTION = "A binary encoder & decoder for Hathora",
     _URL = "https://github.com/wolf81/bin-serde-lua",
@@ -25,6 +27,7 @@ local serde = {
     ]], 
 }
 
-serde.coder = require(_PATH .. ".bin-serde")
+M.Writer = serde.Writer
+M.Reader = serde.Reader
 
-return serde
+return M

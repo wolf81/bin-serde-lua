@@ -19,7 +19,7 @@ Then, whenever you want to encode some data in the binary format, create a
 writer instance and write using appropriate data types, as such:
 
 ```lua
-local writer = serde.coder.Writer()
+local writer = serde.Writer()
 
 writer.writeBits({ 0, 1, 0, 1 }) -- array of binary data
 writer.writeUInt8(5) -- 8-bit unsigned int
@@ -36,7 +36,7 @@ writer.writeUVarint(7757784722LL) -- add LL annotation for large unsigned intege
 In order to read, create an instance of the reader and use it as such:
 
 ```lua
-local reader = serde.coder.Reader()
+local reader = serde.Reader()
 
 reader.readBits(4) -- { 0, 1, 0, 1 }
 reader.readUInt8() -- 5
