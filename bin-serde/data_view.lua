@@ -41,7 +41,7 @@ function DataView.new(_, buffer)
     end
 
     local function setUInt8(pos, val)
-        local bytes = struct.pack(">B", val)
+        local bytes = struct.pack("<B", val)
         setBytes(pos, bytes)
     end
 
@@ -51,22 +51,22 @@ function DataView.new(_, buffer)
     end
 
     local function setUInt32(pos, val)
-        local bytes = struct.pack(">I", val)
+        local bytes = struct.pack("<I", val)
         setBytes(pos, bytes)
     end
 
     local function setUInt64(pos, val)
-        local bytes = struct.pack(">L", val)
+        local bytes = struct.pack("<L", val)
         setBytes(pos, bytes)
     end
 
     local function setFloat32(pos, val)
-        local bytes = struct.pack(">f", val)
+        local bytes = struct.pack("<f", val)
         setBytes(pos, bytes)
     end
 
     local function setString(pos, val)
-        local bytes = struct.pack(">c" .. #val, val)
+        local bytes = struct.pack("<c" .. #val, val)
         setBytes(pos, bytes)
     end
 
@@ -75,7 +75,7 @@ function DataView.new(_, buffer)
     end
 
     local function getUInt8(pos)
-        return struct.unpack(">B", self.buffer.bytes(), pos + 1)
+        return struct.unpack("<B", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt16(pos)
@@ -83,19 +83,19 @@ function DataView.new(_, buffer)
     end
 
     local function getUInt32(pos)
-        return struct.unpack(">I", self.buffer.bytes(), pos + 1)
+        return struct.unpack("<I", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt64(pos)
-        return struct.unpack(">L", self.buffer.bytes(), pos + 1)
+        return struct.unpack("<L", self.buffer.bytes(), pos + 1)
     end
 
     local function getFloat32(pos)
-        return struct.unpack(">f", self.buffer.bytes(), pos + 1)
+        return struct.unpack("<f", self.buffer.bytes(), pos + 1)
     end
 
     local function getString(pos, len)
-        return struct.unpack(">c" .. len, self.buffer.bytes(), pos + 1)
+        return struct.unpack("<c" .. len, self.buffer.bytes(), pos + 1)
     end
 
     local function getByte(pos)
