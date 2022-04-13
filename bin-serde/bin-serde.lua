@@ -190,9 +190,10 @@ Writer.new = function()
                 if i + j == #bits then
                     break
                 end
+                local v = bits[i + j + 1]
                 byte = bit.bor(
                     byte, 
-                    bit.lshift(bits[i + j + 1] == 1 and 1 or 0, j)
+                    bit.lshift((v == 1 or v == true) and 1 or 0, j)
                 )
             end
             writeUInt8(byte)
@@ -312,7 +313,7 @@ Reader.new = function(_, view)
         for _, byte in ipairs(bytes) do
             for i = 0, 7 do
                 if #bits >= num_bits then break end
-                bits[#bits + 1] = bit.band(bit.rshift(byte, i), 1)
+                bits[#bits + 1] = bit.band(bit.rshift(byte, i), 1) == 1
             end
         end
         
