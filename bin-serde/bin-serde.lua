@@ -187,9 +187,8 @@ Writer.new = function()
         for i = 0, #bits - 1, 8 do
             local byte = 0
             for j = 0, 7 do
-                if i + j == #bits then
-                    break
-                end
+                if i + j == #bits then break end
+                
                 local v = bits[i + j + 1]
                 byte = bit.bor(
                     byte, 
