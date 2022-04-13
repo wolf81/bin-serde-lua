@@ -149,7 +149,7 @@ Writer.new = function()
 
     local function writeVarint(val)
         local r1 = bit.arshift(val, 0x3f)
-        local r2 = bit.lshift(val, 0x1)
+        local r2 = bit.lshift(val, 0x01)
         local n = bit.bxor(r1, r2)
         writeUVarint(n)
     end
