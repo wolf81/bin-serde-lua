@@ -240,19 +240,19 @@ Reader.new = function(_, view)
     local function readUInt8()
         local v = self.view.getUInt8(self.pos)
         self.pos = self.pos + 1
-        return v
+        return tonumber(v)
     end
 
     local function readUInt16()
         local v = self.view.getUInt16(self.pos)
         self.pos = self.pos + 2
-        return v
+        return tonumber(v)
     end
 
     local function readUInt32()
         local v = self.view.getUInt32(self.pos)
         self.pos = self.pos + 4
-        return v
+        return tonumber(v)
     end
 
     local function readUInt64()
@@ -277,7 +277,7 @@ Reader.new = function(_, view)
     end
 
     local function readVarint()
-        local val = readUVarint() * 1LL
+        local val = readUVarint()
         local r1 = bit.rshift(val, 0x1)
         local r2 = -(bit.band(val, 0x1))
         return bit.bxor(r1, r2)

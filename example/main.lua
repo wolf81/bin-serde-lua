@@ -10,7 +10,7 @@ local Reader = serde.Reader
 local function printBits(bits)
     local s = ""
     for i, b in ipairs(bits) do
-        s = s .. b
+        s = s .. (b and 1 or 0)
         if i % 8 == 0 then
             s = s .. " "
         end 
