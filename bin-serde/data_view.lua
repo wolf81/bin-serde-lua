@@ -106,6 +106,12 @@ function DataView.new(_, buffer)
         return self.buffer.slice(pos + 1, len)
     end
 
+    local function eachByte(fn)
+        for i = 1, self.buffer.byteLength() do
+            fn(getByte(i))
+        end
+    end
+
     local function toHex()
         return self.buffer.toHex()
     end
@@ -129,6 +135,8 @@ function DataView.new(_, buffer)
         getFloat32 = getFloat32,
         getString = getString,
         getByte = getByte,
+
+        eachByte = eachByte,
 
         slice = slice,
         toHex = toHex,
