@@ -51,7 +51,7 @@ function DataView.new(_, buffer)
     end
 
     local function setUInt32(pos, val)
-        local bytes = struct.pack("<I", val)
+        local bytes = struct.pack(">I", val)
         setBytes(pos, bytes)
     end
 
@@ -83,7 +83,7 @@ function DataView.new(_, buffer)
     end
 
     local function getUInt32(pos)
-        return struct.unpack("<I", self.buffer.bytes(), pos + 1)
+        return struct.unpack(">I", self.buffer.bytes(), pos + 1)
     end
 
     local function getUInt64(pos)
