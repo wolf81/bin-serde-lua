@@ -77,7 +77,7 @@ function struct.pack(format, ...)
           val = math.floor(val / (2 ^ 8))
         end
       else
-        table.insert(bytes, string.char(math.floor(mantissa) % (2 ^ 8)))
+        table.insert(bytes, string.char(math.floor(mantissa + 0.5) % (2 ^ 8)))
         val = math.floor(mantissa / (2 ^ 8))
         table.insert(bytes, string.char(math.floor(val) % (2 ^ 8)))
         val = math.floor(val / (2 ^ 8))
