@@ -70,6 +70,7 @@ function DataView.new(_, buffer)
         setBytes(pos, bytes)
     end
 
+    -- TODO: perhaps should setUInt8() here instead?
     local function setByte(pos, val)
         self.buffer.setByte(pos + 1, val)
     end
@@ -98,6 +99,7 @@ function DataView.new(_, buffer)
         return struct.unpack("<c" .. len, self.buffer.bytes(), pos + 1)
     end
 
+    -- TODO: perhaps should return result for getUInt8() 
     local function getByte(pos)
         return self.buffer.getByte(pos + 1)
     end
@@ -107,8 +109,8 @@ function DataView.new(_, buffer)
     end
 
     local function eachByte(fn)
-        for i = 1, self.buffer.byteLength() do
-            fn(getByte(i))
+        for i = 0, self.buffer.byteLength() - 1 do
+            fn(getUInt8(i))
         end
     end
 
