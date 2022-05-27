@@ -42,7 +42,7 @@ Writer.new = function()
 
     local function writeUInt16(val)
         ensureSize(self, 2)
-        self.view.setUInt8(self.pos, val)
+        self.view.setUInt16(self.pos, val)
         self.pos = self.pos + 2
     end
 
